@@ -1,5 +1,6 @@
 # We don't want to include our fonts in the repository
-fonts/
+fonts/*
+!fonts/README.md
 
 ########### github template ###########
 
