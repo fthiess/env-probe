@@ -5,6 +5,9 @@ fonts/*
 # Don't include our config file
 config.py
 
+# Emacs backups
+*~
+
 
 ########### github template ###########
 
