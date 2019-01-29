@@ -2,6 +2,10 @@
 fonts/*
 !fonts/README.md
 
+# Don't include our config file
+config.py
+
+
 ########### github template ###########
 
 # Byte-compiled / optimized / DLL files

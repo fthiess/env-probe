@@ -1,7 +1,7 @@
 # Example configuration file; rename this to config.py and replace the entries below with
 # values appropriate to you.
 
-probe-id = "<alpha probe id goes here>"
+probe_id = "<alpha probe id goes here>"
 
-adafruit-io-username = "<your username goes here>"
-adafruit-io-key = "<your key goes here>"
+adafruit_io_username = "<your username goes here>"
+adafruit_io_key = "<your key goes here>"

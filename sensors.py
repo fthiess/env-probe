@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import config
+
 from smbus2 import SMBus
 from bmp280 import BMP280  # Temperature/pressure sensor
 import ltr559              # Light/proximity sensor
@@ -14,9 +16,6 @@ from Adafruit_IO import Client, Feed, RequestError
 
 import os
 import time
-
-ADAFRUIT_IO_USERNAME = "fthiess"
-ADAFRUIT_IO_KEY = "93c9681959fc4e828bb489c9028f4bab"
 
 
 def make_font(name, size):
@@ -36,7 +35,7 @@ device = sh1106(serial_interface=serial,
 
 font = make_font("DroidSansMono.ttf", 20)
 
-aio = Client(ADAFRUIT_IO_USERNAME, ADAFRUIT_IO_KEY)
+aio = Client(config.adafruit_io_username, config.adafruit_io_key)
 
 temperature_feed = aio.feeds('temperature')
 pressure_feed = aio.feeds('pressure')
@@ -49,14 +48,14 @@ while True:
     pressure = bmp280.get_pressure()
 
     lux = ltr559.get_lux()
-#    prox = ltr559.get_proximity()
+    prox = ltr559.get_proximity()
 
     with canvas(device) as draw:
         draw.text((0, 15), 'T {:>8.2f}'.format(tempf), font=font, fill="white")
         draw.text((0, 50), 'P {:>8.2f}'.format(pressure), font=font, fill="white")
         draw.text((0, 85), 'L {:>8.2f}'.format(lux), font=font, fill="white")
 
-    print("T: {:05.2f}*F P: {:08.2f}hPa L: {:08.2f}".format(tempf, pressure, lux))
+    print("T: {:05.2f}*F P: {:08.2f}hPa L: {:08.2f} Px: {:5.2f}".format(tempf, pressure, lux, prox))
 
     aio.send(temperature_feed.key, tempf)
     aio.send(pressure_feed.key, pressure)
