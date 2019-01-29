@@ -1,6 +1,0 @@
-# Local configuration file, not in git
-
-probe-id = "1"
-
-adafruit-io-username = "fthiess"
-adafruit-io-key = "93c9681959fc4e828bb489c9028f4bab"
