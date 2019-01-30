@@ -37,9 +37,9 @@ font = make_font("DroidSansMono.ttf", 20)
 
 aio = Client(config.adafruit_io_username, config.adafruit_io_key)
 
-temperature_feed = aio.feeds('temperature')
-pressure_feed = aio.feeds('pressure')
-light_feed = aio.feeds('light')
+temperature_feed = aio.feeds('temperature-'+config.probe_id)
+pressure_feed = aio.feeds('pressure-'+config.probe_id)
+light_feed = aio.feeds('light-'+config.probe_id)
 
 
 while True:
@@ -55,7 +55,7 @@ while True:
         draw.text((0, 50), 'P {:>8.2f}'.format(pressure), font=font, fill="white")
         draw.text((0, 85), 'L {:>8.2f}'.format(lux), font=font, fill="white")
 
-    print("T: {:05.2f}*F P: {:08.2f}hPa L: {:08.2f} Px: {:5.2f}".format(tempf, pressure, lux, prox))
+    print("T: {:05.2f}*F P: {:08.2f}hPa L: {:08.2f} Px: {}".format(tempf, pressure, lux, prox))
 
     aio.send(temperature_feed.key, tempf)
     aio.send(pressure_feed.key, pressure)
