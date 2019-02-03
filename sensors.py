@@ -18,7 +18,7 @@ import os
 import time
 
 
-class env_sensor:
+class temp_sensor:
     def __init__(self, probe_id, aio):
         self.aio = aio
         bus = SMBus(1)
@@ -37,6 +37,20 @@ class env_sensor:
         return tempf,pressure
 
 
+class light_sensor:
+    def __init__(self, probe_id, aio):
+        self.aio = aio
+        self.lux_feed = self.aio.feeds('light-' + probe_id)
+    
+    def reading(self):
+        lux = ltr559.get_lux()
+        prox = ltr559.get_proximity()
+
+        self.aio.send(self.lux_feed.key, lux)
+        
+        return lux,prox
+
+
 def make_font(name, size):
     font_path = os.path.abspath(os.path.join(
         os.path.dirname(__file__), 'fonts', name))
@@ -45,8 +59,9 @@ def make_font(name, size):
 # Instantiate an Adafruit.IO object
 aio = Client(config.adafruit_io_username, config.adafruit_io_key)
 
-# Instantiate a env sensor object
-bmp280 = env_sensor(config.probe_id, aio)
+# Instantiate sensor objects
+bmp = temp_sensor(config.probe_id, aio)
+ltr = light_sensor(config.probe_id, aio)
 
 serial = i2c(port=1, address=0x3C)
 device = sh1106(serial_interface=serial,
@@ -57,15 +72,9 @@ device = sh1106(serial_interface=serial,
 font = make_font("DroidSansMono.ttf", 20)
 
 
-pressure_feed = aio.feeds('pressure-'+ config.probe_id)
-light_feed = aio.feeds('light-' + config.probe_id)
-
-
 while True:
-    temp,pressure = bmp280.reading()
-
-    lux = ltr559.get_lux()
-    prox = ltr559.get_proximity()
+    temp,pressure = bmp.reading()
+    lux,prox = ltr.reading()
 
     with canvas(device) as draw:
         draw.text((0, 15), 'T {:>8.2f}'.format(temp), font=font, fill="white")
@@ -74,6 +83,4 @@ while True:
 
     print("T: {:05.2f}*F P: {:08.2f}hPa L: {:08.2f} Px: {}".format(temp, pressure, lux, prox))
 
-    aio.send(light_feed.key, lux)
-
-    time.sleep(60)
+    time.sleep(10)
