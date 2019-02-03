@@ -34,7 +34,7 @@ class temp_sensor:
         self.aio.send(self.temp_feed.key, tempf)
         self.aio.send(self.pressure_feed.key, pressure)
         
-        return tempf,pressure
+        return tempf, pressure
 
 
 class light_sensor:
@@ -48,7 +48,7 @@ class light_sensor:
 
         self.aio.send(self.lux_feed.key, lux)
         
-        return lux,prox
+        return lux, prox
 
 
 def make_font(name, size):
@@ -73,8 +73,8 @@ font = make_font("DroidSansMono.ttf", 20)
 
 
 while True:
-    temp,pressure = bmp.reading()
-    lux,prox = ltr.reading()
+    temp, pressure = bmp.reading()
+    lux, prox = ltr.reading()
 
     with canvas(device) as draw:
         draw.text((0, 15), 'T {:>8.2f}'.format(temp), font=font, fill="white")
