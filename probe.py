@@ -2,10 +2,6 @@
 
 import config
 
-# from smbus2 import SMBus
-# from bmp280 import BMP280  # Temperature/pressure sensor
-# import ltr559              # Light/proximity sensor
-
 from luma.core.interface.serial import i2c
 from luma.core.render import canvas
 from luma.oled.device import sh1106  # sh1107 is the same except 128x128
@@ -42,8 +38,8 @@ font = make_font("DroidSansMono.ttf", 20)
 
 
 while True:
-    temp, pressure = bmp.reading()
-    lux, prox = ltr.reading()
+    temp, pressure = bmp.read()
+    lux, prox = ltr.read()
 
     with canvas(device) as draw:
         draw.text((0, 15), 'T {:>8.2f}'.format(temp), font=font, fill="white")

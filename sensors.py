@@ -7,8 +7,6 @@ from smbus2 import SMBus
 from bmp280 import BMP280  # Temperature/pressure sensor
 import ltr559              # Light/proximity sensor
 
-#from Adafruit_IO import Client, Feed, RequestError
-
 
 class temp_sensor:
     def __init__(self, probe_id, aio):
@@ -18,7 +16,7 @@ class temp_sensor:
         self.pressure_feed = self.aio.feeds('pressure-' + probe_id)
         self.bmp280 = BMP280(i2c_dev=bus)
     
-    def reading(self):
+    def read(self):
         tempc = self.bmp280.get_temperature()
         tempf = tempc * 9 / 5 + 32
         pressure = self.bmp280.get_pressure()
@@ -34,7 +32,7 @@ class light_sensor:
         self.aio = aio
         self.lux_feed = self.aio.feeds('light-' + probe_id)
     
-    def reading(self):
+    def read(self):
         lux = ltr559.get_lux()
         prox = ltr559.get_proximity()
 
