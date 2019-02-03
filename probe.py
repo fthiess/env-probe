@@ -29,4 +29,4 @@ while True:
     
     print("T: {:>5.2f}*F P: {:>8.2f}hPa L: {:>6.0f} Px: {:>5.0f}".format(temp, pressure, lux, prox))
 
-    time.sleep(10)
+    time.sleep(config.sleep_between_samples)

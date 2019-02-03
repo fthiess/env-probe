@@ -5,3 +5,5 @@ probe_id = "<probe id goes here>"
 
 adafruit_io_username = "<your username goes here>"
 adafruit_io_key = "<your key goes here>"
+
+sleep_between_samples = 60
