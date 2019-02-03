@@ -12,8 +12,8 @@ class temp_sensor:
     def __init__(self, probe_id, aio):
         self.aio = aio
         bus = SMBus(1)
-        self.temp_feed = self.aio.feeds('temperature-' + probe_id)
-        self.pressure_feed = self.aio.feeds('pressure-' + probe_id)
+        self.temp_feed = self.aio.feeds(probe_id+'.temperature')
+        self.pressure_feed = self.aio.feeds(probe_id+'.pressure')
         self.bmp280 = BMP280(i2c_dev=bus)
     
     def read(self):
@@ -30,7 +30,7 @@ class temp_sensor:
 class light_sensor:
     def __init__(self, probe_id, aio):
         self.aio = aio
-        self.lux_feed = self.aio.feeds('light-' + probe_id)
+        self.lux_feed = self.aio.feeds(probe_id+'.light')
     
     def read(self):
         lux = ltr559.get_lux()
