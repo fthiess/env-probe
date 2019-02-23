@@ -22,11 +22,14 @@ ltr = sensors.light_sensor(config.probe_id, aio)
 
 
 while True:
-    temp, pressure = bmp.read()
+    temp = bmp.read()
+    bmp.push(temp)
+    
     lux, prox = ltr.read()
+    ltr.push(lux)
 
 #    oled.show(temp=temp, pressure=pressure, lux=lux)
     
-    print("T: {:>5.2f}*F P: {:>8.2f}hPa L: {:>6.0f} Px: {:>5.0f}".format(temp, pressure, lux, prox))
+    print("T: {:>5.2f}*F L: {:>6.0f} Px: {:>5.0f}".format(temp, lux, prox))
 
     time.sleep(config.sleep_between_samples)
