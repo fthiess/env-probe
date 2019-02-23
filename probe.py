@@ -6,8 +6,8 @@ from Adafruit_IO import Client, Feed, RequestError
 
 import time
 
-import sensors
-import display
+import libraries/sensors
+import libraries/display
 
 
 # Instantiate an Adafruit.IO object
