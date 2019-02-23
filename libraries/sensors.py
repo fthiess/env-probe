@@ -19,8 +19,8 @@ class temp_sensor:
     def read(self):
         tempc = self.bmp280.get_temperature()
         tempf = tempc * 9 / 5 + 32
-        pressure = self.bmp280.get_pressure()
-        return tempf, pressure
+#        pressure = self.bmp280.get_pressure()
+        return tempf
     
     def push(self, temp):       # Not including press
         self.aio.send(self.temp_feed.key, temp)
