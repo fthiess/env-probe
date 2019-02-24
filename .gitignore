@@ -8,6 +8,9 @@ config.py
 # Emacs backups
 *~
 
+# Log files
+*.log
+
 
 ########### github template ###########
 
