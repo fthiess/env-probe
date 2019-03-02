@@ -14,18 +14,18 @@ class temp_sensor:
         self.aio = aio
         bus = SMBus(1)
         self.temp_feed = self.aio.feeds(probe_id+'.temperature')
-#        self.pressure_feed = self.aio.feeds(probe_id+'.pressure')
+        self.pressure_feed = self.aio.feeds(probe_id+'.pressure')
         self.bmp280 = BMP280(i2c_dev=bus)
     
     def read(self):
         tempc = self.bmp280.get_temperature()
         tempf = tempc * 9 / 5 + 32
-#        pressure = self.bmp280.get_pressure()
+        pressure = self.bmp280.get_pressure()
         return tempf
     
-    def push(self, temp):       # Not including press
+    def push(self, temp):
         self.aio.send(self.temp_feed.key, temp)
-#        self.aio.send(self.pressure_feed.key, press)
+        self.aio.send(self.pressure_feed.key, press)
 
 
 class env_sensor:
@@ -34,7 +34,7 @@ class env_sensor:
         self.temp_feed = self.aio.feeds(probe_id+'.temperature')
         self.humid_feed = self.aio.feeds(probe_id+'.humidity')
         self.gas_feed = self.aio.feeds(probe_id+'.gas')
-#        self.pressure_feed = self.aio.feeds(probe_id+'.pressure')
+        self.pressure_feed = self.aio.feeds(probe_id+'.pressure')
 
         self.bme680 = bme680.BME680(bme680.I2C_ADDR_PRIMARY)
         
@@ -48,31 +48,32 @@ class env_sensor:
         self.bme680.set_gas_heater_duration(150)
         self.bme680.select_gas_heater_profile(0)
         
-        return
     
     def read(self):
-        tempf = 0
-        pressure = 0
-        humidity = 0
-        gas = 0
+        self.temp = -1
+        self.pressure = -1
+        self.humidity = -1
+        self.gas = -1
+        print("ready to do sensor read")
         
         if self.bme680.get_sensor_data():
+            print("successfully read sensor")
             tempc = self.bme680.data.temperature        # Celsius
-            tempf = tempc * 9 / 5 + 32
+            self.temp = tempc * 9 / 5 + 32
 
-            pressure = self.bme680.data.pressure        # hectoPascals
-            humidity = self.bme680.data.humidity        # % relative
+            self.pressure = self.bme680.data.pressure        # hectoPascals
+            self.humidity = self.bme680.data.humidity        # % relative
         
             if self.bme680.data.heat_stable:
-                gas = self.bme680.data.gas_resistance   # Ohms
+                print("capturing gas")
+                self.gas = self.bme680.data.gas_resistance   # Ohms
 
-        return tempf, pressure, humidity, gas
     
-    def push(self, temp, press, humid, gas):
-        self.aio.send(self.temp_feed.key, temp)
-        self.aio.send(self.humid_feed.key, humid)
-        self.aio.send(self.gas_feed.key, gas)
-        return
+    def push():
+        self.aio.send(self.temp_feed.key, self.temp)
+        self.aio.send(self.humid_feed.key, self.humidity)
+        self.aio.send(self.pressure_feed.key, self.pressure)
+        self.aio.send(self.gas_feed.key, self.gas)
 
 
 class light_sensor:

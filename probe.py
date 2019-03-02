@@ -45,9 +45,13 @@ while True:
         press = -1
         humidity = -1
         gas = -1
-        temp, press, humidity, gas = bme.read()
+        bme.read()
+        temp = bme.temperature
+        press = bme.pressure
+        humidity = bme.humidity
+        gas = bme.gas
         try:
-            bme.push(temp, press, humidity, gas)
+            bme.push
         except:
             print("Exception pushing env data to Adafruit.io")
     except:
@@ -76,4 +80,5 @@ while True:
           " l=",lux)
 
 
-    time.sleep(config.sleep_between_samples)
+#    time.sleep(config.sleep_between_samples)
+    time.sleep(2)
