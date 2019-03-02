@@ -13,14 +13,14 @@ import libraries.display as display
 
 # Instantiate an Adafruit.IO object
 aio = Client(config.adafruit_io_username, config.adafruit_io_key)
-print("Adafruit.io initialized")
+print(datetime.datetime.now(),"Adafruit.io initialized")
 
 # Instantiate sensor objects
 bmp = sensors.temp_sensor(config.probe_id, aio)
-print("BMP sensor initialized")
+print(datetime.datetime.now(),"BMP sensor initialized")
 
 ltr = sensors.light_sensor(config.probe_id, aio)
-print("Light sensor initialized")
+print(datetime.datetime.now(),"Light sensor initialized")
 
 
 # Instantiate display
@@ -34,7 +34,7 @@ while True:
         try:
             bmp.push(temp)
         except:
-            print("Excepting pushing temp to Adafruit.io")
+            print("Exception pushing temp to Adafruit.io")
     except:
         print("Temp read exception, not pushing")
 
@@ -45,7 +45,7 @@ while True:
         try:
             ltr.push(lux)
         except:
-            print("Excepting pushing lux to Adafruit.io")
+            print("Exception pushing lux to Adafruit.io")
     except:
         print("Lux read exception, not pushing")
         
