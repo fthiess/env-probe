@@ -16,8 +16,11 @@ aio = Client(config.adafruit_io_username, config.adafruit_io_key)
 print(datetime.datetime.now(),"Adafruit.io initialized")
 
 # Instantiate sensor objects
-bmp = sensors.temp_sensor(config.probe_id, aio)
-print(datetime.datetime.now(),"BMP sensor initialized")
+#bmp = sensors.temp_sensor(config.probe_id, aio)
+#print(datetime.datetime.now(),"BMP280 sensor initialized")
+
+bme = sensors.env_sensor(config.probe_id, aio)
+print(datetime.datetime.now(),"BME680 sensor initialized")
 
 ltr = sensors.light_sensor(config.probe_id, aio)
 print(datetime.datetime.now(),"Light sensor initialized")
@@ -26,24 +29,37 @@ print(datetime.datetime.now(),"Light sensor initialized")
 # Instantiate display
 #oled = display.oled()
 
-
 while True:
+    # try:
+    #     temp = -1
+    #     temp = bmp.read()
+    #     try:
+    #         bmp.push(temp)
+    #     except:
+    #         print("Exception pushing temp to Adafruit.io")
+    # except:
+    #     print("Temp read exception, not pushing")
+
     try:
         temp = -1
-        temp = bmp.read()
+        press = -1
+        humidity = -1
+        gas = -1
+        temp, press, humidity, gas = bme.read()
         try:
-            bmp.push(temp)
+            bme.push(temp, press, humidity, gas)
         except:
-            print("Exception pushing temp to Adafruit.io")
+            print("Exception pushing env data to Adafruit.io")
     except:
-        print("Temp read exception, not pushing")
+        print("Env read exception, not pushing")
+
 
     try:
         lux = -1
         prox = -1
         lux, prox = ltr.read()
         try:
-            ltr.push(lux)
+            ltr.push(lux,prox)
         except:
             print("Exception pushing lux to Adafruit.io")
     except:
@@ -52,7 +68,12 @@ while True:
 
 #    oled.show(temp=temp, pressure=pressure, lux=lux)
     
-    print(datetime.datetime.now()," temp=",temp," lux=",lux)
+    print(datetime.datetime.now(),
+          " t=",temp,
+          " p=",press,
+          " h=",humidity,
+          " g=",gas,
+          " l=",lux)
 
 
     time.sleep(config.sleep_between_samples)
