@@ -30,55 +30,33 @@ print(datetime.datetime.now(),"Light sensor initialized")
 #oled = display.oled()
 
 while True:
-    # try:
-    #     temp = -1
-    #     temp = bmp.read()
-    #     try:
-    #         bmp.push(temp)
-    #     except:
-    #         print("Exception pushing temp to Adafruit.io")
-    # except:
-    #     print("Temp read exception, not pushing")
-
     try:
-        temp = -1
-        press = -1
-        humidity = -1
-        gas = -1
         bme.read()
-        temp = bme.temperature
-        press = bme.pressure
-        humidity = bme.humidity
-        gas = bme.gas
         try:
-            bme.push
+            bme.push()
         except:
-            print("Exception pushing env data to Adafruit.io")
+            print(datetime.datetime.now(),"EXCEPTION pushing env to Adafruit")
     except:
-        print("Env read exception, not pushing")
+        print(datetime.datetime.now(),"Env read EXCEPTION, not pushing")
 
 
     try:
-        lux = -1
-        prox = -1
-        lux, prox = ltr.read()
+        ltr.read()
         try:
-            ltr.push(lux,prox)
+            ltr.push()
         except:
-            print("Exception pushing lux to Adafruit.io")
+            print(datetime.datetime.now(),"EXCEPTION pushing light to Adafruit")
     except:
-        print("Lux read exception, not pushing")
+        print(datetime.datetime.now(),"Light read EXCEPTION, not pushing")
         
 
 #    oled.show(temp=temp, pressure=pressure, lux=lux)
     
     print(datetime.datetime.now(),
-          " t=",temp,
-          " p=",press,
-          " h=",humidity,
-          " g=",gas,
-          " l=",lux)
+          " t=",bme.temperature,
+          " p=",bme.pressure,
+          " h=",bme.humidity,
+          " g=",bme.gas,
+          " l=",ltr.light)
 
-
-#    time.sleep(config.sleep_between_samples)
-    time.sleep(2)
+    time.sleep(config.sleep_between_samples)

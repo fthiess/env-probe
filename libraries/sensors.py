@@ -47,33 +47,33 @@ class env_sensor:
         self.bme680.set_gas_heater_temperature(320)
         self.bme680.set_gas_heater_duration(150)
         self.bme680.select_gas_heater_profile(0)
-        
+         
     
     def read(self):
-        self.temp = -1
+        self.temperature = -1
         self.pressure = -1
         self.humidity = -1
         self.gas = -1
-        print("ready to do sensor read")
-        
+         
         if self.bme680.get_sensor_data():
-            print("successfully read sensor")
             tempc = self.bme680.data.temperature        # Celsius
-            self.temp = tempc * 9 / 5 + 32
-
+            self.temperature = tempc * 9 / 5 + 32
+ 
             self.pressure = self.bme680.data.pressure        # hectoPascals
             self.humidity = self.bme680.data.humidity        # % relative
-        
+         
             if self.bme680.data.heat_stable:
-                print("capturing gas")
-                self.gas = self.bme680.data.gas_resistance   # Ohms
-
-    
-    def push():
-        self.aio.send(self.temp_feed.key, self.temp)
-        self.aio.send(self.humid_feed.key, self.humidity)
-        self.aio.send(self.pressure_feed.key, self.pressure)
-        self.aio.send(self.gas_feed.key, self.gas)
+                 self.gas = self.bme680.data.gas_resistance   # Ohms
+            
+    def push(self):
+        if self.temperature != -1:
+            self.aio.send(self.temp_feed.key, self.temperature)
+        if self.humidity != -1:
+            self.aio.send(self.humid_feed.key, self.humidity)
+        if self.pressure != -1:
+            self.aio.send(self.pressure_feed.key, self.pressure)
+        if self.gas != -1:
+            self.aio.send(self.gas_feed.key, self.gas)
 
 
 class light_sensor:
@@ -82,9 +82,9 @@ class light_sensor:
         self.lux_feed = self.aio.feeds(probe_id+'.light')
     
     def read(self):
-        lux = ltr559.get_lux()
-        prox = ltr559.get_proximity()
-        return lux, prox
+        self.light = ltr559.get_lux()
+        self.proximity = ltr559.get_proximity()
     
-    def push(self, lux, prox):
-        self.aio.send(self.lux_feed.key, lux)
+    def push(self):
+        if self.light != -1:
+            self.aio.send(self.lux_feed.key, self.light)
