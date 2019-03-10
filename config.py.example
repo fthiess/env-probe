@@ -1,8 +1,6 @@
 # Example configuration file; rename this to config.py and replace the entries below with
 # values appropriate to you.
 
-# Local configuration file, not in git
-
 # Probe ID; used in Adafruit.io feed names
 probe_id = "<probe id goes here>"
 
