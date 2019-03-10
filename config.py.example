@@ -1,9 +1,22 @@
 # Example configuration file; rename this to config.py and replace the entries below with
 # values appropriate to you.
 
+# Local configuration file, not in git
+
+# Probe ID; used in Adafruit.io feed names
 probe_id = "<probe id goes here>"
 
+# Adafruit.io credentials
 adafruit_io_username = "<your username goes here>"
 adafruit_io_key = "<your key goes here>"
 
+# Calibration parameters; simple offsets from sensor readings
+temperature_offset = 0
+pressure_offset = 0
+humidity_offset = 0
+gas_offset = 0
+light_offset = 0
+proximity_offset = 0
+
+# Number of seconds between samples
 sleep_between_samples = 60

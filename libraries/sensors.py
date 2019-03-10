@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
 # Library with code to talk to sensors
-
-
 from smbus2 import SMBus
 from bmp280 import BMP280  # Temperature/pressure sensor
 import bme680              # Temp, pressure, humidity, VOC sensor
 import ltr559              # Light/proximity sensor
 
+import config
 
 class temp_sensor:
     def __init__(self, probe_id, aio):
@@ -56,14 +55,14 @@ class env_sensor:
         self.gas = -1
          
         if self.bme680.get_sensor_data():
-            tempc = self.bme680.data.temperature        # Celsius
-            self.temperature = tempc * 9 / 5 + 32
+            tempc = self.bme680.data.temperature         # Celsius
+            self.temperature = tempc * 9 / 5 + 32 + config.temperature_offset
  
-            self.pressure = self.bme680.data.pressure        # hectoPascals
-            self.humidity = self.bme680.data.humidity        # % relative
+            self.pressure = self.bme680.data.pressure + config.pressure_offset        # hectoPascals
+            self.humidity = self.bme680.data.humidity + config.humidity_offset        # % relative
          
             if self.bme680.data.heat_stable:
-                 self.gas = self.bme680.data.gas_resistance   # Ohms
+                 self.gas = self.bme680.data.gas_resistance + config.gas_offset   # Ohms
             
     def push(self):
         if self.temperature != -1:
@@ -82,8 +81,8 @@ class light_sensor:
         self.lux_feed = self.aio.feeds(probe_id+'.light')
     
     def read(self):
-        self.light = ltr559.get_lux()
-        self.proximity = ltr559.get_proximity()
+        self.light = ltr559.get_lux() + config.light_offset
+        self.proximity = ltr559.get_proximity() + config.proximity_offset
     
     def push(self):
         if self.light != -1:
